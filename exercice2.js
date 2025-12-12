@@ -25,3 +25,15 @@ async function chargerCdpK () {
 
   console.log('Données CDp/K chargées :', cdpKData)
 }
+
+async function chargerDefinitions () {
+  const response = await fetch(URL_DEFINITIONS)
+
+  if (!response.ok) {
+    throw new Error('Impossible de charger definition_forces.php')
+  }
+
+  const html = await response.text()
+  const definitionsDiv = document.querySelector('#definitions')
+  definitionsDiv.innerHTML = html
+}
