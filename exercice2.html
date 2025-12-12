@@ -3,59 +3,136 @@
   <head>
     <meta charset="UTF-8">
     <title>Calculateur de coefficient de traînée (CD)</title>
-
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     >
+
+    <style>
+      body {
+        background-color: #ffffff;
+      }
+
+      .page-wrapper {
+        max-width: 960px;
+        margin: 30px auto;
+        border: 1px solid #000;
+        padding: 20px 30px;
+      }
+
+      .title-bar {
+        border: 1px solid #000;
+        text-align: center;
+        padding: 12px 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 25px;
+        text-transform: none;
+      }
+
+      .main-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .def-box {
+        border: 1px solid #000;
+        width: 30%;
+        min-height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .def-box > div {
+        width: 100%;
+        padding: 10px;
+      }
+
+      .form-box {
+        flex: 1;
+        border: 1px solid #000;
+        padding: 20px;
+      }
+
+      .form-box h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .form-label {
+        font-weight: 500;
+      }
+
+      .hint-text {
+        font-size: 0.8rem;
+        color: #666;
+      }
+
+      .btn-calculer {
+        width: 100%;
+        border: 1px solid #000;
+        background-color: #e4e4e4;
+        font-weight: 600;
+        padding: 10px 0;
+        margin-top: 15px;
+      }
+
+      .btn-calculer:hover {
+        background-color: #d4d4d4;
+      }
+
+      .result-box {
+        border: 1px solid #000;
+        margin-top: 20px;
+        padding: 15px 20px;
+      }
+
+      .result-box h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .result-box p {
+        margin: 0;
+      }
+    </style>
   </head>
 
-  <body class="bg-light">
-    <main class="container py-4">
-      <header class="mb-4">
-        <h1 class="h3">Calculateur de coefficient de traînée (CD)</h1>
-        <p class="text-muted">
-          Entrez la position des volets (Flap), le nombre de Mach (M) et le
-          coefficient de portance (Cl), puis cliquez sur <strong>Calculer</strong>.
-        </p>
+  <body>
+    <div class="page-wrapper">
+      <header class="title-bar">
+        Calculateur de coefficient de traînée (CD)
       </header>
-
-      <div class="row g-4">
-        
-        <section class="col-md-4">
-          <h2 class="h5 mb-3">Définition des forces</h2>
-          <div id="definitions" class="border rounded bg-white p-3">
-           
-            <p class="text-muted mb-0">
-              Chargement des définitions...
-            </p>
+      <div class="main-row">
+        <section class="def-box">
+          <div id="definitions">
+            Définition forces
           </div>
         </section>
 
-        <section class="col-md-8">
+        <section class="form-box">
+          <h2>Position des volets, Mach &amp; Cl</h2>
 
-          <form id="form-cd" class="border rounded bg-white p-3 mb-3">
-            <h2 class="h5 mb-3">Paramètres de calcul</h2>
-
+          <form id="form-cd">
             <div class="mb-3">
-              <label for="flap" class="form-label">
-                Position des volets (Flap)
-              </label>
+              <label for="flap" class="form-label">Position des volets</label>
               <select id="flap" class="form-select" required>
-                <option value="">Sélectionner une valeur</option>
+                <option value="">Sélectionner une valeur de flap</option>
                 <option value="0">0</option>
                 <option value="20">20</option>
                 <option value="45">45</option>
               </select>
-              <div class="form-text">
-                Valeurs possibles : 0, 20, 45.
-              </div>
+              <div class="hint-text">Valeurs possibles : 0, 20, 45.</div>
             </div>
 
             <div class="mb-3">
-              <label for="mach" class="form-label">
-                Nombre de Mach (M)
-              </label>
+              <label for="mach" class="form-label">Nombre de Mach</label>
               <input
                 id="mach"
                 type="number"
@@ -67,10 +144,9 @@
                 required
               >
             </div>
+
             <div class="mb-3">
-              <label for="cl" class="form-label">
-                Coefficient de portance (Cl)
-              </label>
+              <label for="cl" class="form-label">Coefficient de portance (Cl)</label>
               <input
                 id="cl"
                 type="number"
@@ -83,23 +159,19 @@
               >
             </div>
 
-            <button
-              id="btn-calculer"
-              type="submit"
-              class="btn btn-primary"
-            >
-              Calculer
+            <button id="btn-calculer" type="submit" class="btn-calculer">
+              CALCULER
             </button>
           </form>
-          <section class="border rounded bg-white p-3">
-            <h2 class="h5 mb-3">Résultat</h2>
-            <p id="resultat" class="fw-bold mb-0">
-              En attente de calcul...
-            </p>
-          </section>
         </section>
       </div>
-    </main>
-    <script src="./exercice2.js" type="module"></script>
+
+      <section class="result-box">
+        <h2>Résultat</h2>
+        <p id="resultat">En attente de calcul...</p>
+      </section>
+    </div>
+
+    <script src="./exercice2.js"></script>
   </body>
 </html>
