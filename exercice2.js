@@ -12,3 +12,16 @@ window.addEventListener('DOMContentLoaded', async () => {
     alert('Erreur de chargement des données. Vérifie Docker / URLs.')
   }
 })
+
+async function chargerCdpK () {
+  const response = await fetch(URL_CDP_K)
+
+  if (!response.ok) {
+    throw new Error('Impossible de charger data_cdp_k.php')
+  }
+
+  // On suppose que le PHP renvoie du JSON
+  cdpKData = await response.json()
+
+  console.log('Données CDp/K chargées :', cdpKData)
+}
