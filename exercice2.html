@@ -2,36 +2,60 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8">
-    <title>Calculateur de coefficient de traînée</title>
+    <title>Calculateur de coefficient de traînée (CD)</title>
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     >
   </head>
+
   <body class="bg-light">
     <main class="container py-4">
-      <h1 class="mb-4">Calculateur de coefficient de traînée (CD)</h1>
+      <header class="mb-4">
+        <h1 class="h3">Calculateur de coefficient de traînée (CD)</h1>
+        <p class="text-muted">
+          Entrez la position des volets (Flap), le nombre de Mach (M) et le
+          coefficient de portance (Cl), puis cliquez sur <strong>Calculer</strong>.
+        </p>
+      </header>
 
-      <div class="row">
+      <div class="row g-4">
+        
         <section class="col-md-4">
-          <h2 class="h5">Définition des forces</h2>
-          <div id="definitions" class="border p-3 bg-white">   
+          <h2 class="h5 mb-3">Définition des forces</h2>
+          <div id="definitions" class="border rounded bg-white p-3">
+           
+            <p class="text-muted mb-0">
+              Chargement des définitions...
+            </p>
           </div>
         </section>
+
         <section class="col-md-8">
-          <form id="form-cd" class="border p-3 bg-white mb-3">
+
+          <form id="form-cd" class="border rounded bg-white p-3 mb-3">
+            <h2 class="h5 mb-3">Paramètres de calcul</h2>
+
             <div class="mb-3">
-              <label for="flap" class="form-label">Position des volets (Flap)</label>
+              <label for="flap" class="form-label">
+                Position des volets (Flap)
+              </label>
               <select id="flap" class="form-select" required>
-                <option value="">Sélectionner</option>
+                <option value="">Sélectionner une valeur</option>
                 <option value="0">0</option>
                 <option value="20">20</option>
                 <option value="45">45</option>
               </select>
+              <div class="form-text">
+                Valeurs possibles : 0, 20, 45.
+              </div>
             </div>
 
             <div class="mb-3">
-              <label for="mach" class="form-label">Nombre de Mach (M)</label>
+              <label for="mach" class="form-label">
+                Nombre de Mach (M)
+              </label>
               <input
                 id="mach"
                 type="number"
@@ -39,12 +63,14 @@
                 min="0"
                 max="0.85"
                 class="form-control"
-                placeholder="Valeur entre 0 et 0.85"
+                placeholder="Valeur comprise entre 0 et 0.85"
                 required
               >
             </div>
             <div class="mb-3">
-              <label for="cl" class="form-label">Coefficient de portance (Cl)</label>
+              <label for="cl" class="form-label">
+                Coefficient de portance (Cl)
+              </label>
               <input
                 id="cl"
                 type="number"
@@ -52,23 +78,28 @@
                 min="0.2"
                 max="1.2"
                 class="form-control"
-                placeholder="Valeur entre 0.2 et 1.2"
+                placeholder="Valeur comprise entre 0.2 et 1.2"
                 required
               >
             </div>
 
-            <button id="btn-calculer" type="submit" class="btn btn-primary">
+            <button
+              id="btn-calculer"
+              type="submit"
+              class="btn btn-primary"
+            >
               Calculer
             </button>
           </form>
-
-          <section class="border p-3 bg-white">
-            <h2 class="h5">Résultat</h2>
-            <p id="resultat" class="fw-bold">En attente de calcul...</p>
+          <section class="border rounded bg-white p-3">
+            <h2 class="h5 mb-3">Résultat</h2>
+            <p id="resultat" class="fw-bold mb-0">
+              En attente de calcul...
+            </p>
           </section>
         </section>
       </div>
     </main>
-    <script src="./exercice2.js" type="module"></script>
+    <script src="./exercice2.js"></script>
   </body>
 </html>

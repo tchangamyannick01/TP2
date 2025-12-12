@@ -1,7 +1,10 @@
+
 const URL_CDP_K = 'http://localhost:8080/data_cdp_k.php'
 const URL_DEFINITIONS = 'http://localhost:8080/definition_forces.php'
 
-let cdpKData = null
+let cdpKData = null 
+
+
 window.addEventListener('DOMContentLoaded', async () => {
   try {
     await chargerCdpK()
@@ -9,7 +12,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     configurerFormulaire()
   } catch (err) {
     console.error(err)
-    alert('Erreur de chargement des données. Vérifie Docker / URLs.')
+    alert('Erreur : impossible de charger les données. Vérifiez Docker.')
   }
 })
 
@@ -20,10 +23,8 @@ async function chargerCdpK () {
     throw new Error('Impossible de charger data_cdp_k.php')
   }
 
-  // On suppose que le PHP renvoie du JSON
   cdpKData = await response.json()
-
-  console.log('Données CDp/K chargées :', cdpKData)
+  console.log('CDp/K chargés :', cdpKData)
 }
 
 async function chargerDefinitions () {
@@ -34,9 +35,9 @@ async function chargerDefinitions () {
   }
 
   const html = await response.text()
-  const definitionsDiv = document.querySelector('#definitions')
-  definitionsDiv.innerHTML = html
+  document.querySelector('#definitions').innerHTML = html
 }
+
 function configurerFormulaire () {
   const form = document.querySelector('#form-cd')
   const resultat = document.querySelector('#resultat')
@@ -44,17 +45,12 @@ function configurerFormulaire () {
   form.addEventListener('submit', event => {
     event.preventDefault()
 
-    const flapSelect = document.querySelector('#flap')
-    const machInput = document.querySelector('#mach')
-    const clInput = document.querySelector('#cl')
+    const flap = document.querySelector('#flap').value
+    const m = parseFloat(document.querySelector('#mach').value)
+    const cl = parseFloat(document.querySelector('#cl').value)
 
-    const flap = flapSelect.value
-    const m = parseFloat(machInput.value)
-    const cl = parseFloat(clInput.value)
-
-    // Validation simple
     if (flap !== '0' && flap !== '20' && flap !== '45') {
-      alert('Veuillez choisir une position de volets (0, 20 ou 45).')
+      alert('Veuillez choisir une position des volets : 0, 20 ou 45.')
       return
     }
 
@@ -64,47 +60,60 @@ function configurerFormulaire () {
     }
 
     if (Number.isNaN(cl) || cl < 0.2 || cl > 1.2) {
-      alert('Cl doit être entre 0.2 et 1.2.')
+      alert('Le coefficient Cl doit être entre 0.2 et 1.2.')
       return
     }
 
-    const cd = calculerCD(flap, m, cl)
-
-    resultat.textContent = `CD = ${cd.toFixed(5)}`
+    try {
+      const cd = calculerCD(flap, m, cl)
+      resultat.textContent = `CD = ${cd.toFixed(5)}`
+    } catch (err) {
+      console.error(err)
+      alert('Erreur dans le calcul. Vérifiez les valeurs.')
+    }
   })
 }
+
 function calculerCDcomp (m, cl) {
   const cl2 = cl * cl
 
   if (m >= 0 && m <= 0.60) {
     return 0
-  } else if (m > 0.60 && m <= 0.78) {
-    const valeur = 0.0508 - 0.1748 * m + 0.1504 * m * m
-    return valeur * cl2
-  } else if (m > 0.78 && m <= 0.85) {
-    const valeur = -99.3434 + 380.888 * m - 486.8 * m * m + 207.408 * m * m * m
-    return valeur * cl2
-  } else {
-    
-    throw new Error('M hors plage 0–0.85')
   }
+
+  if (m > 0.60 && m <= 0.78) {
+    const value = 0.0508 - 0.1748 * m + 0.1504 * m * m
+    return value * cl2
+  }
+
+  if (m > 0.78 && m <= 0.85) {
+    const value =
+      -99.3434 +
+      380.888 * m -
+      486.8 * m * m +
+      207.408 * m * m * m
+
+    return value * cl2
+  }
+
+  throw new Error('Mach hors limite (0 à 0.85)')
 }
+
 function calculerCD (flap, m, cl) {
   if (!cdpKData) {
-    throw new Error('Les données CDp/K ne sont pas chargées')
+    throw new Error('Les données CDp/K ne sont pas encore chargées')
   }
 
-  const infosFlap = cdpKData[flap]
-  if (!infosFlap) {
-    throw new Error(`Aucune donnée CDp/K pour flap=${flap}`)
+  const infos = cdpKData[flap]
+  if (!infos) {
+    throw new Error(`Aucune valeur CDp/K pour flap=${flap}`)
   }
 
-  const cdp = parseFloat(infosFlap.CDp)
-  const k = parseFloat(infosFlap.K)
+  const cdp = parseFloat(infos.CDp)
+  const k = parseFloat(infos.K)
   const cl2 = cl * cl
 
   const cdComp = calculerCDcomp(m, cl)
-  const cd = cdp + k * cl2 + cdComp
 
-  return cd
+  return cdp + k * cl2 + cdComp
 }
