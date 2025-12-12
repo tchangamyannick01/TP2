@@ -1,49 +1,66 @@
-import _ from '../node_modules/lodash-es/lodash.js'
 const URL_PARAMS = 'http://localhost:8080/params_grille_nombres.php'
-window.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const params = await chargerParametres()
-    genererGrille(params)
-  } catch (err) {
-    console.error(err)
-    alert('Erreur : impossible de charger les paramètres.')
-  }
+
+window.addEventListener('DOMContentLoaded', function () {
+  chargerParametres()
+    .then(function (params) {
+      genererGrille(params)
+    })
+    .catch(function (err) {
+      console.error(err)
+      alert('Erreur : impossible de charger les paramètres.')
+    })
 })
-async function chargerParametres () {
-  const response = await fetch(URL_PARAMS)
 
-  if (!response.ok) {
-    throw new Error('Erreur lors du chargement des paramètres')
-  }
-
-  const json = await response.json()
-  console.log('Paramètres chargés :', json)
-
-  return json 
+function chargerParametres () {
+  return fetch(URL_PARAMS)
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error('Erreur lors du chargement des paramètres')
+      }
+      return response.json()
+    })
+    .then(function (json) {
+      console.log('Paramètres chargés :', json)
+      return json 
+    })
 }
+
+// Génération de la grille HTML
 function genererGrille (params) {
-  const nbLignes = params.nombre_lignes
-  const nbColonnes = params.nombre_colonnes
 
-  const conteneur = document.querySelector('#conteneur-grille')
-  const resultat = document.querySelector('#texte-resultat')
+  var config = params.parametres_tableau
 
-  const table = document.createElement('table')
+  var nbLignes = config.nombre_lignes
+  var nbColonnes = config.nombre_colonnes
+
+  var min = config.plage_nombres_aleatoires.nombre_minimum
+  var max = config.plage_nombres_aleatoires.nombre_maximum
+
+  var couleurFond = config.couleur_fond_cellule
+  var couleurTexte = config.couleur_texte_cellule
+  var seuil = config.nombre_base  
+
+  var conteneur = document.querySelector('#conteneur-grille')
+  var resultat = document.querySelector('#texte-resultat')
+
+  var table = document.createElement('table')
   table.className = 'table table-bordered text-center align-middle'
 
-  let compteurSup80 = 0
+  var compteurSup = 0
 
-  for (let i = 0; i < nbLignes; i++) {
-    const tr = document.createElement('tr')
+  for (var i = 0; i < nbLignes; i++) {
+    var tr = document.createElement('tr')
 
-    for (let j = 0; j < nbColonnes; j++) {
-      const td = document.createElement('td')
-      const nombre = _.random(10, 90)
+    for (var j = 0; j < nbColonnes; j++) {
+      var td = document.createElement('td')
+
+      var nombre = _.random(min, max)
       td.textContent = nombre
-      if (nombre > 80) {
-        compteurSup80++
-        td.style.backgroundColor = 'rgb(5,173,131)'
-        td.style.color = 'rgb(255,255,255)'
+
+      if (nombre > seuil) {
+        compteurSup++
+        td.style.backgroundColor = couleurFond
+        td.style.color = couleurTexte
         td.style.fontWeight = 'bold'
       }
 
@@ -52,8 +69,10 @@ function genererGrille (params) {
 
     table.appendChild(tr)
   }
+
   conteneur.innerHTML = ''
   conteneur.appendChild(table)
+
   resultat.textContent =
-    `Nombre de cellules ayant une valeur supérieure à 80 : ${compteurSup80}`
+    'Nombre de cellules ayant un nombre supérieur à ' + seuil + ' : ' + compteurSup
 }

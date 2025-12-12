@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-     <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <title>Exercice 1 – Grille de nombres</title>
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     >
-</head>
-<body class="bg-light">
+  </head>
+
+  <body class="bg-light">
     <main class="container py-4">
       <header class="mb-4">
         <h1 class="h3">Exercice 1 – Génération d'une grille de nombres</h1>
@@ -18,11 +20,16 @@
       </header>
 
       <section class="border rounded bg-white p-3 mb-3">
-        <h2 class="h5 mb-3">Grille générée</h2>
+        <h2 class="h5 mb-3">Tableau de nombres</h2>
+
         <div id="conteneur-grille" class="table-responsive"></div>
+
         <p id="texte-resultat" class="fw-bold mt-3"></p>
       </section>
     </main>
-<script type="module" src="./exercice1.js"></script>
-</body>
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+    <script src="./exercice1.js"></script>
+  </body>
 </html>

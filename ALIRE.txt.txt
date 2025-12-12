@@ -1,0 +1,68 @@
+TP2 – Programmation Web Dynamique
+Cours 420-V88-LP
+Session Automne 2025
+Enseignant : Nicola Demers
+
+Étudiant : Yannick Tchangam Djomassi
+
+Structure du projet
+
+Racine du projet tp2 :
+- index.html          : page d’accueil du TP2 (liens vers les exercices)
+- exercice1.html      : interface de l’exercice 1 (grille de nombres)
+- exercice1.js        : script JS pour l’exercice 1 (DOM + lodash + fetch)
+- exercice2.html      : interface de l’exercice 2 (calculateur de coefficient de traînée)
+- exercice2.js        : script JS pour l’exercice 2 (formulaire + fetch + calcul)
+- data_cdp_k.php
+- definition_forces.php
+- params_grille_nombres.php
+- docker-compose.yml
+- package.json / package-lock.json
+- node_modules/       : dépendances npm (lodash, standard, etc.)
+
+
+Instructions pour exécuter le projet
+
+1) Démarrer le serveur Docker (Apache + PHP) :
+   - Ouvrir un terminal dans le dossier tp2
+   - Exécuter : docker compose up -d
+
+2) Vérifier les URLs suivantes dans le navigateur :
+   - http://localhost:8080/params_grille_nombres.php
+   - http://localhost:8080/data_cdp_k.php
+   - http://localhost:8080/definition_forces.php
+
+3) Exercice 1 – Grille de nombres :
+   - Ouvrir le fichier exercice1.html dans Firefox Developer.
+   - Les paramètres (nombre de lignes/colonnes) sont lus via fetch() sur params_grille_nombres.php.
+   - La grille est générée dynamiquement en Javascript.
+   - Les valeurs sont générées avec lodash (_.random) entre 10 et 90.
+   - Les cellules dont la valeur > 80 ont un fond rgb(5,173,131) et un texte blanc (rgb(255,255,255)).
+   - Le nombre total de cellules > 80 est affiché en dessous du tableau.
+
+4) Exercice 2 – Calculateur de coefficient de traînée :
+   - Ouvrir le fichier exercice2.html dans Firefox Developer.
+   - Le bloc "Définition des forces" est chargé via fetch() depuis definition_forces.php.
+   - Les valeurs CDp et K sont chargées via fetch() depuis data_cdp_k.php.
+   - L’utilisateur saisit : Flap (0, 20, 45), Mach (0 à 0.85) et Cl (0.2 à 1.2).
+   - Tous les champs sont validés côté client avant le calcul.
+   - Le script applique les formules données dans l’énoncé (CD = CDp + K * Cl^2 + CDcomp).
+   - CDcomp est calculé selon les plages de Mach (0–0.60, 0.60–0.78, 0.78–0.85).
+   - Le résultat final CD est affiché avec 5 décimales.
+
+
+StandardJS et qualité du code
+
+- Les scripts exercice1.js et exercice2.js ont été vérifiés avec StandardJS.
+- Commandes utilisées :
+  - npx standard exercice1.js
+  - npx standard exercice2.js
+- Les erreurs signalées par StandardJS ont été corrigées (nommage, espaces, etc.).
+
+
+Particularités / Remarques
+
+- Lodash (v4.17.21) est utilisé pour la génération des nombres aléatoires de l’exercice 1.
+- Bootstrap 5 (CDN) est utilisé pour la mise en forme générale des pages.
+- L’application a été testée sur Firefox Developer Edition, comme demandé.
+
