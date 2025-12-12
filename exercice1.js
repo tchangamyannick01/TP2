@@ -9,3 +9,15 @@ window.addEventListener('DOMContentLoaded', async () => {
     alert('Erreur : impossible de charger les paramètres.')
   }
 })
+async function chargerParametres () {
+  const response = await fetch(URL_PARAMS)
+
+  if (!response.ok) {
+    throw new Error('Erreur lors du chargement des paramètres')
+  }
+
+  const json = await response.json()
+  console.log('Paramètres chargés :', json)
+
+  return json 
+}
