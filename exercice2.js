@@ -89,3 +89,22 @@ function calculerCDcomp (m, cl) {
     throw new Error('M hors plage 0–0.85')
   }
 }
+function calculerCD (flap, m, cl) {
+  if (!cdpKData) {
+    throw new Error('Les données CDp/K ne sont pas chargées')
+  }
+
+  const infosFlap = cdpKData[flap]
+  if (!infosFlap) {
+    throw new Error(`Aucune donnée CDp/K pour flap=${flap}`)
+  }
+
+  const cdp = parseFloat(infosFlap.CDp)
+  const k = parseFloat(infosFlap.K)
+  const cl2 = cl * cl
+
+  const cdComp = calculerCDcomp(m, cl)
+  const cd = cdp + k * cl2 + cdComp
+
+  return cd
+}
