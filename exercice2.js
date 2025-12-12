@@ -73,3 +73,19 @@ function configurerFormulaire () {
     resultat.textContent = `CD = ${cd.toFixed(5)}`
   })
 }
+function calculerCDcomp (m, cl) {
+  const cl2 = cl * cl
+
+  if (m >= 0 && m <= 0.60) {
+    return 0
+  } else if (m > 0.60 && m <= 0.78) {
+    const valeur = 0.0508 - 0.1748 * m + 0.1504 * m * m
+    return valeur * cl2
+  } else if (m > 0.78 && m <= 0.85) {
+    const valeur = -99.3434 + 380.888 * m - 486.8 * m * m + 207.408 * m * m * m
+    return valeur * cl2
+  } else {
+    
+    throw new Error('M hors plage 0–0.85')
+  }
+}
